@@ -45,6 +45,9 @@ jobs:
     needs: builds-push
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.20.0
         with:
