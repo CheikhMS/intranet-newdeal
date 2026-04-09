@@ -90,15 +90,15 @@ jobs:
     #         --name ci-app \
     #         ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-    publish:
-      needs: scans
-      runs-on: ubuntu-latest
-      steps:
-        - name: Verify image
-          run: |
-            docker image ls | grep $IMAGE_NAME
-        - name: Push Docker image
-          run: |
-            docker push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+  publish:
+    needs: scans
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify image
+        run: |
+          docker image ls | grep $IMAGE_NAME
+      - name: Push Docker image
+        run: |
+          docker push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
         
 
