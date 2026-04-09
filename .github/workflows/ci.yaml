@@ -3,8 +3,7 @@ name: CI-Pipeline
 on:
   push:
     branches:
-      - dev
-
+      - dev 
 env:
   IMAGE_NAME: intranet-newdeal
   IMAGE_TAG: latest
@@ -91,7 +90,7 @@ jobs:
     #         --name ci-app \
     #         ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-    push:
+    publish:
       needs: scans
       runs-on: ubuntu-latest
       steps:
