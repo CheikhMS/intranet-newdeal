@@ -15,17 +15,13 @@ jobs:
   # JOB 1 - Build image Docker (nginx:alpine3.23) 
   # ===============================
   builds:
-    runs-on: runner_prod
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Display variables
-        run: |
-          echo "IMAGE_NAME: $IMAGE_NAME"
-          echo "IMAGE_TAG: $IMAGE_TAG"
-          echo "DOCKER_REGISTRY: $DOCKER_REGISTRY"
+      
 
       - name: Login to Docker Hub
         run: |
