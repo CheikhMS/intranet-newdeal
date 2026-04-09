@@ -32,6 +32,10 @@ jobs:
         run: |
           docker build -t ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
       
+      - name: Verify image
+        run: |
+          docker image ls | grep $IMAGE_NAME
+      
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.20.0
         with:
@@ -60,9 +64,7 @@ jobs:
     needs: builds-et-scans
     runs-on: ubuntu-latest
     steps:
-      - name: Verify image
-        run: |
-          docker image ls | grep $IMAGE_NAME
+      
       - name: Push Docker image
         run: |
           docker push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
