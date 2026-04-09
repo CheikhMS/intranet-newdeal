@@ -90,7 +90,7 @@ jobs:
     #         --name ci-app \
     #         ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-  publish:
+  send:
     needs: scans
     runs-on: ubuntu-latest
     steps:
