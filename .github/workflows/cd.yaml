@@ -10,7 +10,7 @@ env:
   IMAGE_TAG: latest
   DOCKER_REGISTRY: ${{ secrets.DOCKERHUB_USERNAME }}
   
-
+  
 jobs:
   # ===============================
   # JOB 1 - scan securite
