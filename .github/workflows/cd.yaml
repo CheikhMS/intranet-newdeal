@@ -1,0 +1,56 @@
+name: CD-Pipeline
+
+on:
+  push:
+    branches:
+      - prod
+
+env:
+  IMAGE_NAME: intranet-newdeal
+  IMAGE_TAG: latest
+  DOCKER_REGISTRY: ${{ secrets.DOCKERHUB_USERNAME }}
+  
+
+jobs:
+  # ===============================
+  # JOB 1 - scan securite
+  # ===============================
+  scans:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.20.0
+        with:
+          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          format: table
+          severity: CRITICAL,HIGH
+          exit-code: 1
+          vuln-type: os,library
+          ignore-unfixed: true
+  # ===============================
+  # JOB 2 - Deploy
+  # ===============================
+
+  deploys:
+    needs: scans
+    runs-on: runner_prod
+    steps:
+      - name: Pull latest image
+        run: |
+          docker pull ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+      - name: Stop existing container
+        run: |
+          docker stop intranet-newdeal; exit 0
+
+      - name: Remove old container
+        run: |
+          docker rm intranet-newdeal; exit 0
+
+      - name: Run new container
+        run: |
+          docker run -d -p 80:80 --name intranet-newdeal ${env:DOCKER_REGISTRY}/${env:IMAGE_NAME}:${env:IMAGE_TAG}
+
+  # ===============================
+  # JOB 3 - Envoie email a l'equipe
+  # ===============================
